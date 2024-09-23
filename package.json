@@ -15,6 +15,11 @@
   "author": "CreativeCoderJed",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.21.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jedidiah-Solomon/Github_Actions.git"
   }
 }
