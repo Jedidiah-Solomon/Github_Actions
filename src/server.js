@@ -14,6 +14,11 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 
+// Intentional error route
+app.get("/error", (req, res) => {
+  throw new Error("This is a deliberate error for testing.");
+});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
