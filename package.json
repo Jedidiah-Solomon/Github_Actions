@@ -1,0 +1,20 @@
+{
+  "name": "github_actions",
+  "version": "1.0.0",
+  "description": "A simple Express.js app with GitHub Actions CI/CD setup. CI/CD, which stands for continuous integration and continuous delivery/deployment, aims to streamline and accelerate the software development lifecycle.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "express",
+    "ci/cd",
+    "github actions"
+  ],
+  "author": "CreativeCoderJed",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
