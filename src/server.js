@@ -19,7 +19,7 @@ app.get("/error", (req, res) => {
   throw new Error("This is a deliberate error for testing.");
 });
 
-// New route for testing success
+// New route for testing success for CCJ
 app.get("/success", (req, res) => {
   res.status(200).send("This is a success message.");
 });
