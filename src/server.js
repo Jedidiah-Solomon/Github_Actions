@@ -19,6 +19,11 @@ app.get("/error", (req, res) => {
   throw new Error("This is a deliberate error for testing.");
 });
 
+// New route for testing success
+app.get("/success", (req, res) => {
+  res.status(200).send("This is a success message.");
+});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
