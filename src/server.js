@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
 
 // Intentional error route
 app.get("/error", (req, res) => {
-  throw new Error("This is a deliberate error for testing.");
+  next(new Error("This is a deliberate error for testing."));
 });
 
 // New route for testing success for CCJ
@@ -24,7 +24,18 @@ app.get("/success", (req, res) => {
   res.status(200).send("This is a success message.");
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+// New route for testing failure
+app.get("/fail", (req, res) => {
+  res.status(404).send("This route should not be accessed.");
 });
+
+// Start the server only if this file is the main module
+let server;
+if (require.main === module) {
+  server = app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+}
+
+// Export the app and server for testing
+module.exports = { app, server: server || null }; // Ensure it's exported as null if not running
