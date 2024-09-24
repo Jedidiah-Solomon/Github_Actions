@@ -243,3 +243,32 @@ First, make sure ESLint is installed in your project:
 npm install eslint --save-dev
 You can also initialize ESLint configuration if you haven't already:
 npx eslint --init
+
+npx snyk test and npx snyk monitor are two commands provided by Snyk to help you manage and monitor vulnerabilities in your project's dependencies, but they serve different purposes:
+
+npx snyk test
+Purpose: This command scans your project’s dependencies for known vulnerabilities at the current point in time. It runs a security test to identify any vulnerabilities in your dependencies.
+Usage: You typically run this command during your development process or as part of your CI/CD pipeline to ensure that no new vulnerabilities have been introduced.
+Output: It provides a detailed report of any vulnerabilities found, including severity levels, recommended fixes, and links to more information about each vulnerability.
+Example Command:
+
+bash
+Copy code
+npx snyk test
+npx snyk monitor
+Purpose: This command takes a snapshot of your project's dependencies and uploads that snapshot to Snyk’s monitoring system. It is used to continuously monitor your project for any new vulnerabilities that may be discovered after the snapshot was taken.
+Usage: You usually run this command after a successful test to ensure that your project is being monitored over time. It’s helpful for long-term maintenance as it alerts you when new vulnerabilities are found in your dependencies.
+Output: It provides a summary of the project and informs you that it has been added to the Snyk dashboard for ongoing monitoring.
+Example Command:
+
+bash
+Copy code
+npx snyk monitor
+Summary of Differences
+Command Purpose When to Use
+npx snyk test Scan for vulnerabilities in dependencies now During development or CI/CD pipeline
+npx snyk monitor Take a snapshot for ongoing monitoring After a successful test
+Recommendations
+Use Both: It's generally a good practice to use both commands in your workflow. Use snyk test to check for vulnerabilities before pushing your code, and use snyk monitor to keep track of vulnerabilities over time.
+Integrate in CI/CD: Integrate both commands in your CI/CD pipeline to ensure continuous security monitoring and to catch vulnerabilities early in the development process.
+By using these tools together, you can maintain a strong security posture for your applications and dependencies. Let me know if you have any other questions!
