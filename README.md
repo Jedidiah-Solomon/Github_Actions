@@ -177,3 +177,69 @@ Not Allowed:
 5.0.0 (major update)
 6.0.0 (any future major versions) 4. Benefits:
 Using ^ allows your project to benefit from bug fixes and new features without breaking compatibility, which is essential for maintaining stability in your application.
+
+Environment Variables
+Environment Variables are used to store configuration values that can be accessed within your application or CI/CD workflows. In the context of GitHub Actions, you can define environment variables in your workflow files, and they will be available to all the steps in that workflow.
+
+How to Set Environment Variables in GitHub Actions
+You can define environment variables directly in your workflow file under the env key.
+
+Secrets
+Secrets are a more secure way to store sensitive information. GitHub encrypts secrets and only exposes them to the workflow during the run. This means they won’t be visible in logs or in the source code, keeping them secure.
+
+How to Set Secrets in GitHub
+Go to Your Repository:
+
+Navigate to the main page of your repository on GitHub.
+Access Settings:
+
+Click on the Settings tab.
+Navigate to Secrets:
+
+In the left sidebar, click on Secrets and variables, then select Actions.
+Add a New Secret:
+
+Click on New repository secret.
+Enter a name for your secret (e.g., MY_API_KEY) and its value (e.g., 12345abcde).
+Click Add secret to save it.
+Using Secrets in GitHub Actions
+You can access these secrets in your workflow file using the secrets context. Here’s how to do it:
+
+````
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        env:
+          MY_API_KEY: ${{ secrets.MY_API_KEY }}  # Access the secret here
+        run: npm test
+      ```
+````
+
+Note:
+
+1. Dependency Check with npm audit
+   You can add a job in your GitHub Actions workflow to run npm audit, which checks for vulnerabilities in your dependencies. use e.g security.yml
+
+Static Code Analysis with ESLint
+If you’re using ESLint for static code analysis, you can add a job to run ESLint as part of your CI workflow. Here’s how to set it up:
+
+Install ESLint
+First, make sure ESLint is installed in your project:
+
+npm install eslint --save-dev
+You can also initialize ESLint configuration if you haven't already:
+npx eslint --init
