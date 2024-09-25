@@ -8,12 +8,21 @@ export default [
     languageOptions: {
       // Use CommonJS module syntax
       sourceType: "commonjs",
+      // Set global variables for Node.js environment
+      globals: {
+        ...globals.node,
+        ...globals.browser, // For browser-related global variables
+      },
     },
   },
   {
-    // Set global variables for browser environments
+    // Configuration specifically for test files
+    files: ["tests/**/*.js"],
     languageOptions: {
-      globals: globals.browser,
+      // Set global variables for Jest testing environment
+      globals: {
+        ...globals.jest,
+      },
     },
   },
   // Include recommended rules from the ESLint plugin for JavaScript

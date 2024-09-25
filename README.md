@@ -244,6 +244,20 @@ npm install eslint --save-dev
 You can also initialize ESLint configuration if you haven't already:
 npx eslint --init
 
+ESLint:
+
+Purpose: ESLint is a static code analysis tool that helps identify problematic patterns in your JavaScript code. It helps maintain code quality by enforcing coding standards, identifying potential bugs, and catching common mistakes.
+In the Workflow: By running npx eslint, you're analyzing your codebase for style and syntax errors, enforcing the rules you've set up in your ESLint configuration file.
+
+npm audit:
+
+Purpose: npm audit checks your project's dependencies for security vulnerabilities. It looks through your package-lock.json or package.json file and identifies known security issues, giving you an opportunity to fix them.
+In the Workflow: Running npm audit ensures that you are alerted to any vulnerabilities in the libraries your project depends on, helping you keep your project secure by recommending fixes.
+Why Include These in Your Workflow?
+ESLint helps ensure your code is clean, maintainable, and follows the agreed-upon coding practices. It's crucial for preventing future bugs and maintaining code consistency.
+npm audit is a security measure to ensure that your project is not using packages with known vulnerabilities, reducing the risk of security breaches in production.
+Including both in your GitHub Actions workflow automates code quality and security checks, allowing you to catch issues early, before they affect your project.
+
 npx snyk test and npx snyk monitor are two commands provided by Snyk to help you manage and monitor vulnerabilities in your project's dependencies, but they serve different purposes:
 
 npx snyk test
@@ -252,8 +266,6 @@ Usage: You typically run this command during your development process or as part
 Output: It provides a detailed report of any vulnerabilities found, including severity levels, recommended fixes, and links to more information about each vulnerability.
 Example Command:
 
-bash
-Copy code
 npx snyk test
 npx snyk monitor
 Purpose: This command takes a snapshot of your project's dependencies and uploads that snapshot to Snyk’s monitoring system. It is used to continuously monitor your project for any new vulnerabilities that may be discovered after the snapshot was taken.
@@ -261,8 +273,6 @@ Usage: You usually run this command after a successful test to ensure that your 
 Output: It provides a summary of the project and informs you that it has been added to the Snyk dashboard for ongoing monitoring.
 Example Command:
 
-bash
-Copy code
 npx snyk monitor
 Summary of Differences
 Command Purpose When to Use
@@ -272,3 +282,85 @@ Recommendations
 Use Both: It's generally a good practice to use both commands in your workflow. Use snyk test to check for vulnerabilities before pushing your code, and use snyk monitor to keep track of vulnerabilities over time.
 Integrate in CI/CD: Integrate both commands in your CI/CD pipeline to ensure continuous security monitoring and to catch vulnerabilities early in the development process.
 By using these tools together, you can maintain a strong security posture for your applications and dependencies. Let me know if you have any other questions!
+
+The key difference between package.json and package-lock.json lies in their purpose and function in managing project dependencies in Node.js:
+
+1. package.json:
+   Purpose: This file is the core manifest of your Node.js project. It contains metadata about your project, scripts, and a list of dependencies.
+   Contents: Includes dependencies and devDependencies (with loose versioning like ^ or ~), along with other fields like the project name, version, author, license, and scripts.
+   Versioning: It defines version ranges (e.g., "^1.2.0") that allow for flexibility when installing updates of dependencies.
+   Editing: Typically edited manually when adding new dependencies or changing project settings.
+   E.g
+
+```
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
+  }
+}
+```
+
+2. package-lock.json:
+   Purpose: This file locks down the exact versions of dependencies and sub-dependencies installed in your project, ensuring consistency across environments. It guarantees that the same dependency tree is installed every time, even on different machines.
+   Contents: Lists all dependencies (including nested ones) with their exact versions, resolved URLs, and checksums.
+   Versioning: The exact version of each package is stored to prevent issues caused by automatic updates of dependencies.
+   Editing: Automatically generated and managed by npm. You don’t edit this file manually.
+   E.g
+
+```
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "lockfileVersion": 1,
+  "requires": true,
+  "dependencies": {
+    "express": {
+      "version": "4.17.1",
+      "resolved": "https://registry.npmjs.org/express/-/express-4.17.1.tgz",
+      "integrity": "sha512-xXXXXXX",
+      "requires": {
+        "body-parser": "~1.19.0",
+        "cookie-parser": "~1.4.4"
+      }
+    }
+  }
+}
+```
+
+1. Caret (^):
+   Meaning: Allows updates that do not change the major version. This is the default when you install a package with npm.
+   Usage: It’s used for allowing non-breaking changes (patch or minor updates).
+   Example:
+   "^1.2.3" means:
+   You can update to any version >=1.2.3 and <2.0.0 (major version 1).
+   "^0.2.3" means:
+   For versions below 1.0.0, it allows patch updates only (>=0.2.3 and <0.3.0), since pre-1.0 versions treat both minor and patch as breaking changes.
+   This allows npm to install versions like 4.17.2, 4.18.0, but not 5.0.0 (major upgrade).
+
+2. Tilde (~):
+   Meaning: Allows updates that do not change the minor version, but allows patch updates.
+   Usage: Use this when you want more strict control and allow only patch updates.
+   Example:
+   "~1.2.3" means:
+   You can update to any version >=1.2.3 and <1.3.0.
+   "~0.2.3" means:
+   You can update to versions >=0.2.3 and <0.3.0.
+
+This allows npm to install versions like 4.17.2, 4.17.3, but not 4.18.0 (minor upgrade).
+Summary:
+^ (caret): Allows minor and patch updates, avoiding breaking changes (major updates).
+~ (tilde): Allows only patch updates, providing more stability by avoiding both minor and major changes.
+The caret (^) is more permissive and often preferred for non-pre-release versions since it allows you to benefit from new features and bug fixes, while tilde (~) is more conservative and useful when you need tighter control over the version updates.
+
+The period (.) after the eslint command specifies that ESLint should lint all files in the current directory and its subdirectories.
+
+eslint . means "run ESLint on all JavaScript files in the current directory and subdirectories."
+The . is a shorthand for the current working directory, and ESLint will search through all files that match its default or configured file patterns (like \*_/_.js).
+If you want to lint only specific files or directories, you could specify the path instead, e.g., eslint src/ to lint just the src directory.
+
+So in your case, eslint . is telling ESLint to lint your entire project.
