@@ -1,0 +1,33 @@
+# .github/workflows/ci_test.yml
+
+name: CI Test Workflow
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env: # Define environment variables for testing
+      NODE_ENV: test
+      PORT: 8001 # Use a different port for tests
+      BASE_URL: "https://github_actions.onrender.com" # Add a sample environment variable
+      MONGODB_URI: ${{ secrets.MONGODB_URI }} # Reference repo secret
+      PAYSTACK_SECRET: ${{ secrets.PAYSTACK_SECRET }} # Reference repo secret
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test

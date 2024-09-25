@@ -5,7 +5,12 @@
   "main": "server.js",
   "scripts": {
     "start": "node src/server.js",
-    "test": "jest"
+    "build": "echo 'Building project...'",
+    "test": "jest",
+    "test2": "jest --coverage",
+    "lint": "eslint .",
+    "format": "prettier --write '**/*.{js,json,css,md}'",
+    "check-format": "prettier --check '**/*.{js,json,css,md}'"
   },
   "keywords": [
     "express",
@@ -23,7 +28,12 @@
     "url": "https://github.com/Jedidiah-Solomon/Github_Actions.git"
   },
   "devDependencies": {
+    "@eslint/js": "^9.11.1",
+    "eslint": "^9.11.1",
+    "globals": "^15.9.0",
     "jest": "^29.7.0",
+    "prettier": "^3.3.3",
+    "snyk": "^1.1293.1",
     "supertest": "^7.0.0"
   }
 }

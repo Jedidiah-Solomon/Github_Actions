@@ -1,0 +1,61 @@
+# .github/workflows/ci_prod.yml
+
+name: CI Production Workflow
+
+on:
+  push:
+    branches:
+      - main # Run only for the main branch (production deployment)
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env: # Define environment variables for production
+      NODE_ENV: production
+      PORT: 8000 # Production port
+      BASE_URL: 'https://github_actions.onrender.com' # Add a sample environment variable
+      MONGODB_URI: ${{ secrets.MONGODB_URI }} # Reference repo secret
+      PAYSTACK_SECRET: ${{ secrets.PAYSTACK_SECRET }} # Reference repo secret
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run Prettier
+        run: npm run format
+
+      - name: Check code formatting
+        run: npm run check-format
+
+      - name: Build project
+        run: npm run build
+
+      - name: Run tests with coverage
+        run: npm run test2 -- --coverage # This assumes you have configured your testing framework to use Istanbul for coverage reporting
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: coverage # Change this to the output directory of your coverage report
