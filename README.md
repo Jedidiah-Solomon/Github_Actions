@@ -364,3 +364,110 @@ The . is a shorthand for the current working directory, and ESLint will search t
 If you want to lint only specific files or directories, you could specify the path instead, e.g., eslint src/ to lint just the src directory.
 
 So in your case, eslint . is telling ESLint to lint your entire project.
+
+The ~/.npm directory is a hidden folder in your home directory that is created by npm (Node Package Manager). Here's what you need to know about it:
+
+What is ~/.npm?
+Location: The ~/.npm directory is located in the home directory of the user running the npm commands. On Unix-like systems (Linux, macOS), the tilde (~) represents the home directory. For example, if your username is user, the full path would be /home/user/.npm on Linux or /Users/user/.npm on macOS. On Windows, it would be located at C:\Users\user\.npm.
+
+Purpose: This directory is primarily used by npm for caching downloaded packages and storing global packages that you install. Caching helps to speed up subsequent installations of the same packages by avoiding re-downloading them from the npm registry.
+
+Contents of ~/.npm
+Cache Files: The directory contains cached versions of packages that you have installed via npm. This allows npm to quickly retrieve these files without needing to fetch them from the internet again.
+
+Global Packages: If you install packages globally using npm install -g <package>, they may also be stored in a subdirectory within ~/.npm.
+
+Example Structure
+Here’s a basic structure of what you might find in the ~/.npm directory:
+
+```
+~/.npm/
+├── _cacache/          # Cached files and metadata
+├── _logs/             # Logs of npm operations
+├── _npx/              # Temporary files for npx executions
+└── <other directories> # Other cached data and configurations
+```
+
+Summary
+The ~/.npm directory plays a crucial role in improving the efficiency of package management in Node.js projects. By caching packages and related data, it minimizes the need for redundant downloads, speeding up both installations and builds.
+
+Your CI Production Workflow YAML file looks good overall! Here’s a breakdown of your setup and clarification regarding the Prettier steps.
+
+Breakdown of Your Workflow
+Trigger Conditions:
+
+The workflow runs on pushes to the main branch and on pull requests, which is a standard setup for production deployments.
+Environment Variables:
+
+You’ve defined necessary environment variables, including referencing secrets for sensitive information like MongoDB URI and Paystack secret. This is good for keeping sensitive data secure.
+Job Steps:
+
+Checkout Code: Uses the actions/checkout to pull your code.
+Setup Node.js: Configures the Node.js environment.
+Cache Node.js Modules: Caches dependencies to speed up subsequent builds.
+Install Dependencies: Installs your project’s dependencies.
+Run ESLint: Checks for code quality issues using ESLint.
+Run Prettier: Formats the code according to Prettier rules.
+Check Code Formatting: Verifies if the code adheres to Prettier formatting rules.
+Build Project: Runs the build command for your project.
+Run Tests: Executes your tests.
+Why Both run: npm run format and run: npm run check-format?
+npm run format: This command applies the Prettier formatting rules to your code, modifying the files in place. It ensures that your code is formatted correctly based on your configuration (e.g., .prettierrc file).
+
+npm run check-format: This command checks if the files are formatted according to Prettier rules without making any changes. If files are not formatted correctly, this command will fail, alerting you to the issues.
+
+When to Use Each Command:
+Use npm run format when you want to automatically fix any formatting issues as part of the CI process, especially if you are making changes to the code.
+Use npm run check-format in scenarios where you want to enforce formatting standards without modifying files. This is useful in pull requests where you want to ensure contributors follow the formatting rules.
+Recommendations:
+Order of Execution: Typically, you might want to run the formatting check before you attempt to format the code. This way, you can quickly see if any issues exist before formatting. If you want to enforce a strict check, you could choose to remove the npm run format step and only use the npm run check-format step in CI.
+
+Combined Step: If you decide to keep both steps, ensure that your CI process clearly communicates when a failure occurs due to formatting issues. This way, contributors know they need to address formatting before their pull requests can be merged.
+
+Final Thoughts:
+Your workflow is set up well for maintaining code quality and ensuring your project follows consistent formatting standards with ESLint and Prettier. Adjust the Prettier steps based on your team's workflow preferences, and you should be in great shape!
+
+The coverageThreshold configuration in Jest is used to specify the minimum code coverage percentages that must be met for different metrics in your test suite. Here’s a breakdown of each part of the configuration:
+
+Breakdown of coverageThreshold
+javascript
+Copy code
+module.exports = {
+// other configurations...
+coverageThreshold: {
+global: {
+branches: 80,
+functions: 80,
+lines: 80,
+statements: 80,
+},
+},
+};
+module.exports:
+
+This is how you export a configuration object in Node.js. In this case, it exports a Jest configuration object, which can include various settings.
+coverageThreshold:
+
+This property defines the coverage thresholds that your test suite must meet. If the coverage does not meet these thresholds, Jest will fail the test run, making it clear that your tests need to be improved.
+global:
+
+This specifies that the thresholds apply to the entire project globally. You can also define thresholds per file or directory if needed.
+branches, functions, lines, statements:
+
+Each of these properties corresponds to a different aspect of code coverage:
+branches: The percentage of branches in your code that are tested. A branch is a point in your code where the execution can follow two or more paths, such as in conditional statements (e.g., if statements).
+functions: The percentage of functions that are called in your code that have tests covering them. It ensures that all functions are exercised by your tests.
+lines: The percentage of executable lines of code that are tested. This metric helps ensure that most lines of your source code have been run during tests.
+statements: This is similar to lines, but it specifically refers to all statements in your code, including declarations and control statements.
+Example
+In this configuration:
+
+You require that 80% of the branches, functions, lines, and statements in your code are covered by tests. If your test suite results show that any of these metrics fall below 80%, Jest will fail the test run.
+Purpose
+Setting these thresholds helps maintain a minimum quality standard for your codebase. By enforcing coverage requirements, you ensure that:
+
+New features and changes to existing code are adequately tested.
+Uncovered code paths are identified and addressed.
+You maintain a culture of quality and testing in your development process.
+Conclusion
+In summary, the coverageThreshold setting in Jest is a powerful tool to ensure that your code is thoroughly tested, which can help catch bugs early and improve code quality over time.
